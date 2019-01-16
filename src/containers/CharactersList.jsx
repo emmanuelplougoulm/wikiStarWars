@@ -2,21 +2,23 @@ import React from "react";
 import CharacterListItem from "../components/CharacterListItem";
 
 const CharactersList = props => {
-  const { charactersList, onClickListItem, moreCharacters } = props;
+  const { charactersList, onClickListItem, next, previous } = props;
 
-return (
-  <div>
-     <ul className="charactersList">
+  return (
+    <div>
+      <ul className="charactersList">
         {charactersList.map(character => {
           return <CharacterListItem key={character.name} character={character} onClickListItem={onClickListItem} />;
         })}
       </ul>
-      <button className="more-characters" onClick={moreCharacters} >
-        More characters
+      <button className="btn-next" onClick={next}>
+        Next
       </button>
-  </div>
- 
-)
+      <button className="btn-previous" onClick={previous}>
+        Previous
+      </button>
+    </div>
+  );
 };
 
 export default CharactersList;

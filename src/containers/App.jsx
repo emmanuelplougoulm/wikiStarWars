@@ -3,8 +3,10 @@ import React, { Component } from "react";
 import SearchBar from "../components/SearchBar.jsx";
 import CharactersList from "./CharactersList";
 import CharacterDetail from "../components/CharacterDetail";
-import axios from "axios";
 import { getCharacters, updateResearch, getNextPage } from "../services/httpClient/people/characters";
+import { getPlanet } from "../services/httpClient/planets/planet";
+import { getSpecie } from "../services/httpClient/species/specie";
+import { getStarship } from "../services/httpClient/starships/starship";
 
 class App extends Component {
   state = {
@@ -16,17 +18,31 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.initCharacters();
+    this.initCurrentCharacter();
+    this.initCharactersList();
+    console.log(this.state.currentPage);
   }
 
-  initCharacters = () => {
+  initCurrentCharacter = () => {
     getCharacters(this.state.currentPage).then(characters => {
       this.setState({
         currentCharacter: characters.results[0],
-        charactersList: characters.results.slice(1, 6),
         nextCharacters: characters.next
       });
       this.getAdditionalInfo();
+    });
+  };
+
+  getAdditionalInfo = () => {
+    const { currentCharacter } = this.state;
+    this.getHomeWorld(currentCharacter.homeworld);
+    this.getSpecies(currentCharacter.species);
+    this.getStarships(currentCharacter.starships);
+  };
+
+  initCharactersList = () => {
+    getCharacters(this.state.currentPage).then(characters => {
+      this.setState({ charactersList: characters.results.slice(1, 6) });
     });
   };
 
@@ -39,12 +55,14 @@ class App extends Component {
       });
     });
 
-  getAdditionalInfo = () => {
-    const { currentCharacter } = this.state;
-    this.getHomeWorld(currentCharacter.homeworld);
-    this.getSpecies(currentCharacter.species);
-    this.getStarships(currentCharacter.starships);
-  };
+  getPreviousCharacters = () =>
+    this.setState({ currentPage: this.state.currentPage - 1 }, () => {
+      getCharacters(this.state.currentPage).then(characters => {
+        this.setState({
+          charactersList: characters.results.slice(1, 6)
+        });
+      });
+    });
 
   onClickListItem = character => this.setState({ currentCharacter: character }, this.getAdditionalInfo);
 
@@ -73,8 +91,7 @@ class App extends Component {
   };
 
   getHomeWorld = homeworldURL => {
-    axios
-      .get(homeworldURL)
+    getPlanet(homeworldURL)
       .then(response => {
         this.setState({ homeworld: response.data.name });
       })
@@ -84,8 +101,7 @@ class App extends Component {
   };
 
   getSpecies = speciesURL => {
-    axios
-      .get(speciesURL)
+    getSpecie(speciesURL)
       .then(response => {
         this.setState({ species: response.data.name });
       })
@@ -102,8 +118,7 @@ class App extends Component {
   };
 
   getStarship = starshipsURL =>
-    axios
-      .get(starshipsURL)
+    getStarship(starshipsURL)
       .then(results => results.data)
       .catch(err => {
         console.log("err", err);
@@ -115,7 +130,8 @@ class App extends Component {
         <CharactersList
           charactersList={this.state.charactersList}
           onClickListItem={this.onClickListItem}
-          moreCharacters={this.getNextCharacters}
+          next={this.getNextCharacters}
+          previous={this.getPreviousCharacters}
           nextCharactersList={this.state.nextCharactersList}
         />
       );
