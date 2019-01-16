@@ -22,7 +22,12 @@ class SearchBar extends Component {
             </button>
           </span>
         </div>
-        {displayError ? <p className="display-error">Hihi, unknown this character is.</p> : null}
+        {displayError ? (
+          <div className="erro-ctnr">
+            <p className="error-txt">Unknown this character is, try again</p>{" "}
+            <img className="error-img" src="../assets/yoda.png" alt="yoda" width="80px" />
+          </div>
+        ) : null}
       </div>
     );
   }

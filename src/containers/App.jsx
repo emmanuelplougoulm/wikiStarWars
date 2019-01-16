@@ -55,14 +55,18 @@ class App extends Component {
       });
     });
 
-  getPreviousCharacters = () =>
-    this.setState({ currentPage: this.state.currentPage - 1 }, () => {
-      getCharacters(this.state.currentPage).then(characters => {
-        this.setState({
-          charactersList: characters.results.slice(1, 6)
+  getPreviousCharacters = () => {
+    if (this.state.currentPage > 1) {
+      this.setState({ currentPage: this.state.currentPage - 1 }, () => {
+        getCharacters(this.state.currentPage).then(characters => {
+          this.setState({
+            charactersList: characters.results.slice(1, 6)
+          });
         });
       });
-    });
+    } else {
+    }
+  };
 
   onClickListItem = character => this.setState({ currentCharacter: character }, this.getAdditionalInfo);
 

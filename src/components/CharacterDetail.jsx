@@ -22,7 +22,22 @@ export const charactersPictures = {
   Bossk: "bossk.jpg",
   "Lando Calrissian": "lando.jpg",
   Lobot: "lobot.jpg",
-  Ackbar: "ackbar.jpg"
+  Ackbar: "ackbar.jpg",
+  "Nute Gunray": "nute.jpg",
+  Gasgano: "gasgano.jpg",
+  "Finis Valorum": "finisvalorum.png",
+  "Jar Jar Binks": "jarjar.jpg",
+  "Roos Tarpals": "roos.jpg",
+  "Rugor Nass": "rugor.jpg",
+  "Darth Maul": "darthmaul.jpg",
+  "Bib Fortuna": "bib.png",
+  "Ayla Secura": "ayla.jpg",
+  "Dud Bolt": "dud.jpg",
+  "Adi Gallia": "gallia.jpg",
+  "Saesee Tiin": "saesee.jpg",
+  "Yarael Poof": "yarael.jpg",
+  "Plo Koon": "plokoon.jpg",
+  "Mas Amedda": "mas.jpg"
 };
 
 const CharacterDetail = props => {
