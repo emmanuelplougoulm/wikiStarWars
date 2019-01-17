@@ -20,7 +20,6 @@ class App extends Component {
   componentDidMount() {
     this.initCurrentCharacter();
     this.initCharactersList();
-    console.log(this.state.currentPage);
   }
 
   initCurrentCharacter = () => {
@@ -46,14 +45,18 @@ class App extends Component {
     });
   };
 
-  getNextCharacters = () =>
-    this.setState({ currentPage: this.state.currentPage + 1 }, () => {
-      getCharacters(this.state.currentPage).then(characters => {
-        this.setState({
-          charactersList: characters.results.slice(1, 6)
+  getNextCharacters = () => {
+    if (this.state.currentPage < 9) {
+      this.setState({ currentPage: this.state.currentPage + 1 }, () => {
+        getCharacters(this.state.currentPage).then(characters => {
+          this.setState({
+            charactersList: characters.results.slice(1, 6)
+          });
         });
       });
-    });
+    } else {
+    }
+  };
 
   getPreviousCharacters = () => {
     if (this.state.currentPage > 1) {

@@ -123,7 +123,8 @@
   margin-top: 20px;
   margin-bottom: 20px;
   width: 45%;
-  max-height: 450px;
+  max-height: 350px;
+  max-width: 300px;
   border-radius: 15px;
   filter: drop-shadow(0 0 15px #cccccc);
 }
@@ -138,6 +139,9 @@
 
 .characterDetail {
   display: flex;
+  background-image: url("/assets/wallpaper3.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .charactersList {

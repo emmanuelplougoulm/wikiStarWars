@@ -37,7 +37,22 @@ export const charactersPictures = {
   "Saesee Tiin": "saesee.jpg",
   "Yarael Poof": "yarael.jpg",
   "Plo Koon": "plokoon.jpg",
-  "Mas Amedda": "mas.jpg"
+  "Mas Amedda": "mas.jpg",
+  "Barriss Offee": "barriss.jpg",
+  Dormé: "dorme.jpg",
+  Dooku: "dooku.jpg",
+  "Bail Prestor Organa": "bail.jpg",
+  "Jango Fett": "jango.png",
+  "Ratts Tyerell": "ratts.jpg",
+  "R4-P17": "r4p17.jpg",
+  "Wat Tambor": "wattambor.jpg",
+  "San Hill": "SanHill.jpg",
+  "Shaak Ti": "shaak-ti.png",
+  Finn: "finn.jpg",
+  Rey: "rey.jpg",
+  "Poe Dameron": "poe.jpg",
+  BB8: "bb8.jpg",
+  "Captain Phasma": "captainphasma.jpg"
 };
 
 const CharacterDetail = props => {
