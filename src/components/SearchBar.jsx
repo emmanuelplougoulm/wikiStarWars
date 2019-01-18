@@ -1,26 +1,37 @@
 import React, { Component } from "react";
 
+const INTERVAL = 250;
+
 class SearchBar extends Component {
+  timeoutId;
+
   constructor(props) {
     super(props);
     this.state = {
       searchText: "",
-      placeHolder: "Type any character name"
+      placeHolder: "Type any character name",
+      intervalBeforeRequest: 1000,
+      lockRequest: false
     };
   }
 
+  shouldComponentUpdate(newProps) {
+    return this.props.displayError !== newProps.displayError;
+  }
+
   render() {
-    const { displayError, searchByName } = this.props;
+    console.log("render search bar");
+    const { displayError } = this.props;
 
     return (
       <div className="master-search-bar">
         <div className="searchBar">
           <input type="text" className="input" onChange={this.handleChange} placeholder={this.state.placeHolder} />
-          <span>
+          {/* <span>
             <button className="go" onClick={() => searchByName(this.state.searchText)}>
               Go
             </button>
-          </span>
+          </span> */}
         </div>
         {displayError ? (
           <div className="erro-ctnr">
@@ -34,10 +45,17 @@ class SearchBar extends Component {
 
   handleChange = e => {
     this.setState({ searchText: e.target.value });
+
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => {
+      console.log("timeint out");
+
+      this.props.searchByName(this.state.searchText);
+    }, INTERVAL);
   };
 
   handleOnClick = e => {
-    this.props.updateResearch(this.state.searchText);
+    this.props.searchByName(this.state.searchText);
   };
 }
 
