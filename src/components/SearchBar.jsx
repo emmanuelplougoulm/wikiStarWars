@@ -5,14 +5,11 @@ const INTERVAL = 250;
 class SearchBar extends Component {
   timeoutId;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: "",
-      placeHolder: "Type any character name",
-      intervalBeforeRequest: 1000,
-      lockRequest: false
-    };
+  state = {
+    searchText: "",
+    placeHolder: "Type any character name",
+    intervalBeforeRequest: 1000,
+    lockRequest: false
   }
 
   shouldComponentUpdate(newProps) {

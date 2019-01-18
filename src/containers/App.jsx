@@ -3,10 +3,7 @@ import React, { Component } from "react";
 import SearchBar from "../components/SearchBar.jsx";
 import CharactersList from "./CharactersList";
 import CharacterDetail from "../components/CharacterDetail";
-import { getCharacters, updateResearch, getNextPage } from "../services/httpClient/people/characters";
-import { getPlanet } from "../services/httpClient/planets/planet";
-import { getSpecie } from "../services/httpClient/species/specie";
-import { getStarship } from "../services/httpClient/starships/starship";
+import { getCharacters, updateResearch } from "../services/httpClient/people/characters";
 
 class App extends Component {
   state = {
@@ -26,15 +23,7 @@ class App extends Component {
         currentCharacter: characters.results[0],
         charactersList: characters.results.slice(1, 10)
       });
-      this.getAdditionalInfo();
     });
-  };
-
-  getAdditionalInfo = () => {
-    const { currentCharacter } = this.state;
-    this.getHomeWorld(currentCharacter.homeworld);
-    this.getSpecies(currentCharacter.species);
-    this.getStarships(currentCharacter.starships);
   };
 
   updateCurrentCharacter = () => {
@@ -45,12 +34,13 @@ class App extends Component {
 
   updateCharactersList = () => {
     getCharacters(this.state.currentPage).then(characters => {
-      this.setState({ charactersList: characters.results.slice(1, 10) });
+      this.setState({ charactersList: characters.results.slice(1, characters.results.length) });
     });
   };
 
   getNextCharacters = () => {
-    if (this.state.currentPage < 9) {
+    const {currentPage, charactersList} = this.state;
+    if (currentPage < charactersList.length - 1) {
       this.setState({ currentPage: this.state.currentPage + 1 }, this.updateCharactersList);
     }
   };
@@ -61,79 +51,25 @@ class App extends Component {
     }
   };
 
-  onClickListItem = character => this.setState({ currentCharacter: character }, this.getAdditionalInfo);
+  onClickListItem = character => this.setState({ currentCharacter: character });
 
   searchByName = searchText => {
     updateResearch(searchText)
-      .then(response => {
-        if (response.results && Array.isArray(response.results) && response.results.length > 0) {
-          this.setState({
-            currentCharacter: response.results[0],
-            displayError: false
-          });
-        } else {
-          this.setState({ displayError: true });
-        }
-      })
-      .catch(err => console.error(err));
+    .then(response => {
+      if (response.results && Array.isArray(response.results) && response.results.length > 0) {
+        this.setState({
+          currentCharacter: response.results[0],
+          displayError: false
+        });
+      } else {
+        this.setState({ displayError: true });
+      }
+    })
+    .catch(err => console.error(err));
   };
-
-  getMoreCharacters = () => {
-    getNextPage().then(characters => {
-      this.setState({
-        charactersList: characters.data.results.slice(1, characters.data.results.length),
-        nextCharacters: characters.data.next
-      });
-    });
-  };
-
-  getHomeWorld = homeworldURL => {
-    getPlanet(homeworldURL)
-      .then(response => {
-        this.setState({ homeworld: response.data.name });
-      })
-      .catch(err => {
-        console.log("err", err);
-      });
-  };
-
-  getSpecies = speciesURL => {
-    getSpecie(speciesURL)
-      .then(response => {
-        this.setState({ species: response.data.name });
-      })
-      .catch(err => {
-        console.log("err", err);
-      });
-  };
-
-  getStarships = starshipsURL => {
-    const promises = starshipsURL.map(starshipURL => this.getStarship(starshipURL));
-    return Promise.all(promises).then(results =>
-      this.setState({ starships: results.map(result => `${result.name} `) })
-    );
-  };
-
-  getStarship = starshipsURL =>
-    getStarship(starshipsURL)
-      .then(results => results.data)
-      .catch(err => {
-        console.log("err", err);
-      });
-
-  renderCharactersList = () => (
-    <CharactersList
-      charactersList={this.state.charactersList}
-      onClickListItem={this.onClickListItem}
-      next={this.getNextCharacters}
-      previous={this.getPreviousCharacters}
-      nextCharactersList={this.state.nextCharactersList}
-    />
-  );
 
   render() {
-    console.log();
-    const { currentCharacter, homeworld, species, starships, displayError } = this.state;
+    const { currentCharacter, charactersList, displayError } = this.state;
 
     return (
       <div className="App">
@@ -146,14 +82,15 @@ class App extends Component {
           <img src="../assets/star-wars-logo-2.png" alt="resistance white logo" height="110" />
           <SearchBar searchByName={this.searchByName} displayError={displayError} />
         </div>
-        <CharacterDetail
-          currentCharacter={currentCharacter}
-          homeworld={homeworld}
-          species={species}
-          starships={starships}
-        />
-
-        <div className="section3">{this.renderCharactersList()}</div>
+        <CharacterDetail currentCharacter={currentCharacter} />
+        <div className="section3">
+          <CharactersList
+            charactersList={charactersList}
+            onClickListItem={this.onClickListItem}
+            next={this.getNextCharacters}
+            previous={this.getPreviousCharacters}
+          />
+        </div>
       </div>
     );
   }

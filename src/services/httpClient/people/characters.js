@@ -15,10 +15,3 @@ export const updateResearch = searchText => {
     .then(response => response.data)
     .catch(err => console.error(err));
 };
-
-export const getNextPage = nextPage => {
-  return axios
-    .get(nextPage)
-    .then(characters => characters.data)
-    .catch(err => console.error(err));
-};
