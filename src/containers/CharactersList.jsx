@@ -2,12 +2,12 @@ import React from "react";
 import CharacterListItem from "../components/CharacterListItem";
 
 const CharactersList = props => {
-  const { charactersList, onClickListItem, next, previous } = props;
+  const { characters, onClickListItem, next, previous } = props;
 
   return (
     <div>
       <ul className="charactersList">
-        {charactersList.map(character => {
+        {characters.map(character => {
           return <CharacterListItem key={character.name} character={character} onClickListItem={onClickListItem} />;
         })}
       </ul>

@@ -8,7 +8,7 @@ import { getCharacters, updateResearch } from "../services/httpClient/people/cha
 class App extends Component {
   state = {
     currentCharacter: {},
-    charactersList: [],
+    characters: [],
     displayError: false,
     currentPage: 1
   };
@@ -21,26 +21,24 @@ class App extends Component {
     getCharacters(this.state.currentPage).then(characters => {
       this.setState({
         currentCharacter: characters.results[0],
-        charactersList: characters.results.slice(1, 10)
+        characters: characters.results
       });
     });
   };
 
   updateCurrentCharacter = () => {
-    getCharacters(this.state.currentPage).then(characters => {
-      this.setState({ currentCharacter: characters.results[0] });
-    });
+    getCharacters(this.state.currentPage)
+    .then(characters => this.setState({ currentCharacter: characters.results[0] }));
   };
 
   updateCharactersList = () => {
-    getCharacters(this.state.currentPage).then(characters => {
-      this.setState({ charactersList: characters.results.slice(1, characters.results.length) });
-    });
+    getCharacters(this.state.currentPage)
+    .then(characters => this.setState({ characters: characters.results }));
   };
 
   getNextCharacters = () => {
-    const {currentPage, charactersList} = this.state;
-    if (currentPage < charactersList.length - 1) {
+    const {currentPage, characters} = this.state;
+    if (characters.length === 10) {
       this.setState({ currentPage: this.state.currentPage + 1 }, this.updateCharactersList);
     }
   };
@@ -69,7 +67,7 @@ class App extends Component {
   };
 
   render() {
-    const { currentCharacter, charactersList, displayError } = this.state;
+    const { currentCharacter, characters, displayError } = this.state;
 
     return (
       <div className="App">
@@ -85,7 +83,7 @@ class App extends Component {
         <CharacterDetail currentCharacter={currentCharacter} />
         <div className="section3">
           <CharactersList
-            charactersList={charactersList}
+            characters={characters}
             onClickListItem={this.onClickListItem}
             next={this.getNextCharacters}
             previous={this.getPreviousCharacters}
