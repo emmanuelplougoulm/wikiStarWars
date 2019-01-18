@@ -51,5 +51,6 @@ export const charactersPictures = {
   "Captain Phasma": "captainphasma.jpg",
   "R5-D4": "R5-D4.jpg",
   "Biggs Darklighter": "BiggsDarklighter.jpg",
-  "Obi-Wan Kenobi": "Obi-WanKenobi.jpg"
+  "Obi-Wan Kenobi": "Obi-WanKenobi.jpg",
+  "Wedge Antilles": "wedge.jpg"
 };
