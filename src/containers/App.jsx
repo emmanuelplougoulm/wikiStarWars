@@ -10,24 +10,21 @@ import { getStarship } from "../services/httpClient/starships/starship";
 
 class App extends Component {
   state = {
-    currentCharacter: [],
+    currentCharacter: {},
     charactersList: [],
     displayError: false,
-    nextCharacters: [],
     currentPage: 1
   };
 
   componentDidMount() {
-    this.initCurrentCharacter();
-    this.initCharactersList();
-    console.log(this.state.currentPage);
+    this.init();
   }
 
-  initCurrentCharacter = () => {
+  init = () => {
     getCharacters(this.state.currentPage).then(characters => {
       this.setState({
         currentCharacter: characters.results[0],
-        nextCharacters: characters.next
+        charactersList: characters.results.slice(1, 10)
       });
       this.getAdditionalInfo();
     });
@@ -40,29 +37,29 @@ class App extends Component {
     this.getStarships(currentCharacter.starships);
   };
 
-  initCharactersList = () => {
+  updateCurrentCharacter = () => {
     getCharacters(this.state.currentPage).then(characters => {
-      this.setState({ charactersList: characters.results.slice(1, 6) });
+      this.setState({ currentCharacter: characters.results[0] });
     });
   };
 
-  getNextCharacters = () =>
-    this.setState({ currentPage: this.state.currentPage + 1 }, () => {
-      getCharacters(this.state.currentPage).then(characters => {
-        this.setState({
-          charactersList: characters.results.slice(1, 6)
-        });
-      });
+  updateCharactersList = () => {
+    getCharacters(this.state.currentPage).then(characters => {
+      this.setState({ charactersList: characters.results.slice(1, 10) });
     });
+  };
 
-  getPreviousCharacters = () =>
-    this.setState({ currentPage: this.state.currentPage - 1 }, () => {
-      getCharacters(this.state.currentPage).then(characters => {
-        this.setState({
-          charactersList: characters.results.slice(1, 6)
-        });
-      });
-    });
+  getNextCharacters = () => {
+    if (this.state.currentPage < 9) {
+      this.setState({ currentPage: this.state.currentPage + 1 }, this.updateCharactersList);
+    }
+  };
+
+  getPreviousCharacters = () => {
+    if (this.state.currentPage > 1) {
+      this.setState({ currentPage: this.state.currentPage - 1 }, this.updateCharactersList);
+    }
+  };
 
   onClickListItem = character => this.setState({ currentCharacter: character }, this.getAdditionalInfo);
 
@@ -84,7 +81,7 @@ class App extends Component {
   getMoreCharacters = () => {
     getNextPage().then(characters => {
       this.setState({
-        charactersList: characters.data.results.slice(1, 6),
+        charactersList: characters.data.results.slice(1, characters.data.results.length),
         nextCharacters: characters.data.next
       });
     });
@@ -124,21 +121,20 @@ class App extends Component {
         console.log("err", err);
       });
 
-  renderCharactersList = () => {
-    if (this.state.charactersList.length >= 4) {
-      return (
-        <CharactersList
-          charactersList={this.state.charactersList}
-          onClickListItem={this.onClickListItem}
-          next={this.getNextCharacters}
-          previous={this.getPreviousCharacters}
-          nextCharactersList={this.state.nextCharactersList}
-        />
-      );
-    }
-  };
+  renderCharactersList = () => (
+    <CharactersList
+      charactersList={this.state.charactersList}
+      onClickListItem={this.onClickListItem}
+      next={this.getNextCharacters}
+      previous={this.getPreviousCharacters}
+      nextCharactersList={this.state.nextCharactersList}
+    />
+  );
 
   render() {
+    console.log();
+    const { currentCharacter, homeworld, species, starships, displayError } = this.state;
+
     return (
       <div className="App">
         <div className="header">
@@ -148,19 +144,16 @@ class App extends Component {
         </div>
         <div className="section1">
           <img src="../assets/star-wars-logo-2.png" alt="resistance white logo" height="110" />
-          <SearchBar searchByName={this.searchByName} displayError={this.state.displayError} />
+          <SearchBar searchByName={this.searchByName} displayError={displayError} />
         </div>
         <CharacterDetail
-          name={this.state.currentCharacter.name}
-          birth_year={this.state.currentCharacter.birth_year}
-          eye_color={this.state.currentCharacter.eye_color}
-          homeworld={this.state.homeworld}
-          height={this.state.currentCharacter.height}
-          skin_color={this.state.currentCharacter.skin_color}
-          species={this.state.species}
-          starships={this.state.starships}
+          currentCharacter={currentCharacter}
+          homeworld={homeworld}
+          species={species}
+          starships={starships}
         />
-        <div>{this.renderCharactersList()}</div>
+
+        <div className="section3">{this.renderCharactersList()}</div>
       </div>
     );
   }
