@@ -11,12 +11,14 @@ const CharactersList = props => {
           return <CharacterListItem key={character.name} character={character} onClickListItem={onClickListItem} />;
         })}
       </ul>
-      <button className="btn-next" onClick={next}>
-        Next
-      </button>
-      <button className="btn-previous" onClick={previous}>
-        Previous
-      </button>
+      <div className="btn-ctnr">
+        <button className="btn-next" onClick={previous}>
+          Previous
+        </button>
+        <button className="btn-next" onClick={next}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };

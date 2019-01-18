@@ -1,5 +1,5 @@
 import React from "react";
-import { charactersPictures } from "../components/CharacterDetail";
+import { charactersPictures } from "../data/images";
 
 const CharacterListItem = props => {
   const { character, onClickListItem } = props;
@@ -10,17 +10,10 @@ const CharacterListItem = props => {
   return (
     <li className="card" onClick={() => onClickListItem(character)}>
       <div className="">
-          <img
-            className=""
-            src={`${BASE_IMG_SEARCH}${nameSearch}`}
-            alt=""
-            background="white"
-            height="250"
-            width="200"
-          />
+        <img className="" src={`${BASE_IMG_SEARCH}${nameSearch}`} alt="" background="white" height="150" width="120" />
       </div>
       <div className="card-info">
-        <h6 className="title_list_item">{character.name}</h6>
+        <p className="title_list_item">{character.name}</p>
       </div>
     </li>
   );
