@@ -19,12 +19,6 @@ class MainPage extends Component {
     }
   }
 
-  onClickListItem = character => this.props.setCharacter(character);
-
-  searchByName = searchText => {
-    this.props.searchCharacter(searchText)
-  };
-
   render() {
 
     return (
@@ -62,8 +56,6 @@ const mapDispatchToProps = dispatch => ({
   next: () => dispatch(incrementPagination()),
   previous: () => dispatch(decrementPagination()),
   getCharacters: indexPage => dispatch(getCharacters(indexPage)),
-  setCharacter: character => dispatch(setCurrentCharacter(character)),
-  searchCharacter: searchText => dispatch(searchCharacterByName(searchText))
 });
 
 // const enhance = connect(mapStateToProps, mapDispatchToProps);

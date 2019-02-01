@@ -1,4 +1,5 @@
 import { fetchCharacters, searchCharacter } from '../../services/httpClient/people/characters'
+import { getPlanet } from '../../services/httpClient/planets/planet';
 import {
     GET_CHARACTERS,
     GET_CHARACTERS_SUCCESS,
@@ -43,8 +44,6 @@ export const searchCharacterByName = (searchText) => {
         dispatch({ type: SEARCH_CHARACTER })
         return searchCharacter(searchText)
             .then(response => {
-                // dispatch({ type: SEARCH_CHARACTER_SUCCESS, payload: response.data.results });
-                console.log(response)
                 if (response.results && Array.isArray(response.results) && response.results.length > 0) {
                     dispatch({ type: SEARCH_CHARACTER_SUCCESS, payload: response.results[0] })
                 }
@@ -58,13 +57,22 @@ export const searchCharacterByName = (searchText) => {
             })
     }
 }
+// dont erase this one son 👴
+export const getCharacterPlanet = (homeworld) => {
+    return (dispatch) => {
+        dispatch({ type: GET_PLANET })
+        return getPlanet(homeworld)
+            .then(response => { dispatch({ type: GET_PLANET_SUCCESS, payload: response }) })
+            .catch(error => { dispatch({ type: GET_PLANET_ERROR, payload: error }) })
+    }
+}
 
 
 
 
 
 
-// export const getPlanet = () => ({ type: GET_PLANET });
+
 // export const getSpecie = () => ({ type: GET_SPECIE });
 // export const getStarship = () => ({ type: GET_STARSHIP });
 // export const getStarships = () => ({ type: GET_STARSHIPS });

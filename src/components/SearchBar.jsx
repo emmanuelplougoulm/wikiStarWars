@@ -6,7 +6,6 @@ const INTERVAL = 250;
 
 class SearchBar extends Component {
   timeoutId;
-
   state = {
     searchText: "",
     placeHolder: "Type any character name",
@@ -19,7 +18,6 @@ class SearchBar extends Component {
   }
 
   render() {
-    console.log("render search bar");
     const { displayError } = this.props;
 
     return (
@@ -49,7 +47,6 @@ class SearchBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentCharacter: state.apiCalls.currentCharacter,
   displayError: state.apiCalls.displayError
 });
 
