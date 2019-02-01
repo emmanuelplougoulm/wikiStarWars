@@ -8,11 +8,6 @@ import { incrementPagination, decrementPagination } from '../store/pagination/ac
 import { getCharacters, setCurrentCharacter, searchCharacterByName } from '../store/apiCalls/actionsCreator';
 
 class MainPage extends Component {
-  state = {
-    currentCharacter: {},
-    characters: [],
-    displayError: false
-  };
 
   componentDidMount() {
     this.props.getCharacters(this.props.currentPage);
@@ -31,7 +26,6 @@ class MainPage extends Component {
   };
 
   render() {
-    const { displayError } = this.props;
 
     return (
       <div className="App">
