@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { connect } from 'react-redux';
 import { charactersPictures } from "../data/images";
 import { getPlanet } from "../services/httpClient/planets/planet";
 import { getSpecie } from "../services/httpClient/species/specie";
@@ -24,31 +25,31 @@ class CharacterDetail extends PureComponent {
   }
 
   fetchAPIData = () => {
-    const {currentCharacter} = this.props;
+    const { currentCharacter } = this.props;
 
     if (!currentCharacter.name) {
-      return ;
+      return;
     }
 
     return Promise.all([this.getHomeWorld(), this.getSpecies(), this.getStarships()])
-    .then(([homeworld, species, starships]) => this.setState({
-        homeworld, 
-        species: species.map(specie => `${specie.name} `), 
+      .then(([homeworld, species, starships]) => this.setState({
+        homeworld,
+        species: species.map(specie => `${specie.name} `),
         starships: starships.map(starship => `${starship.name} `)
       })
-    )
+      )
   }
 
   getHomeWorld = () => getPlanet(this.props.currentCharacter.homeworld);
 
   getSpecies = () => {
-    const {species} = this.props.currentCharacter;
+    const { species } = this.props.currentCharacter;
     const promises = species.map(specie => getSpecie(specie));
     return Promise.all(promises);
   };
 
   getStarships = () => {
-    const {starships} = this.props.currentCharacter;
+    const { starships } = this.props.currentCharacter;
     const promises = starships.map(starship => getStarship(starship));
     return Promise.all(promises);
   };
@@ -81,4 +82,17 @@ class CharacterDetail extends PureComponent {
   }
 }
 
-export default CharacterDetail;
+
+const mapStateToProps = state => ({
+  currentPage: state.pagination.currentPage,
+  characters: state.apiCalls.characters,
+  currentCharacter: state.apiCalls.currentCharacter
+});
+
+
+
+
+
+export default connect(mapStateToProps)(CharacterDetail);
+
+

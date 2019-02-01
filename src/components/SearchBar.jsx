@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { searchCharacterByName } from '../store/apiCalls/actionsCreator';
 
 const INTERVAL = 250;
 
@@ -24,11 +26,6 @@ class SearchBar extends Component {
       <div className="master-search-bar">
         <div className="searchBar">
           <input type="text" className="input" onChange={this.handleChange} placeholder={this.state.placeHolder} />
-          {/* <span>
-            <button className="go" onClick={() => searchByName(this.state.searchText)}>
-              Go
-            </button>
-          </span> */}
         </div>
         {displayError ? (
           <div className="erro-ctnr">
@@ -42,18 +39,22 @@ class SearchBar extends Component {
 
   handleChange = e => {
     this.setState({ searchText: e.target.value });
-
     if (this.timeoutId) clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       console.log("timeint out");
-
-      this.props.searchByName(this.state.searchText);
+      this.props.searchCharacter(this.state.searchText);
     }, INTERVAL);
   };
 
-  handleOnClick = e => {
-    this.props.searchByName(this.state.searchText);
-  };
 }
 
-export default SearchBar;
+const mapStateToProps = state => ({
+  currentCharacter: state.apiCalls.currentCharacter,
+  displayError: state.apiCalls.displayError
+});
+
+const mapDispatchToProps = dispatch => ({
+  searchCharacter: searchText => dispatch(searchCharacterByName(searchText))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

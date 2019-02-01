@@ -1,6 +1,6 @@
-import { INCREMENT_COUNTER, DECREMENT_COUNTER, INCREMENT_COUNTER_BY_NUMBER, DECREMENT_COUNTER_BY_NUMBER } from '../actionsTypes/actionTypes';
+import { INCREMENT_COUNTER, DECREMENT_COUNTER, INCREMENT_COUNTER_BY_NUMBER, DECREMENT_COUNTER_BY_NUMBER } from './actionTypes';
 
-//No need for payload here
+//No need for payload here son
 export const incrementCounter = () => ({ type: INCREMENT_COUNTER });
 export const decrementCounter = () => ({ type: DECREMENT_COUNTER });
 

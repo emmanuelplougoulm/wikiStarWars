@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux';
 import CharacterListItem from "../components/CharacterListItem";
 
 const CharactersList = props => {
@@ -23,4 +24,8 @@ const CharactersList = props => {
   );
 };
 
-export default CharactersList;
+const mapStateToProps = state => ({
+  characters: state.apiCalls.characters,
+});
+
+export default connect(mapStateToProps)(CharactersList);

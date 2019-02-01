@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { incrementCounter, decrementCounter, incrementCounterByNumber, decrementCounterByNumber } from '../store/counter/actionsCreator/actionsCreator'
+import { incrementCounter, decrementCounter, incrementCounterByNumber, decrementCounterByNumber } from '../store/counter/actionsCreator'
 
 class Redux extends Component {
     // incrementCounter = () => this.setState(state => ({ counter: state.counter + 1 }));
