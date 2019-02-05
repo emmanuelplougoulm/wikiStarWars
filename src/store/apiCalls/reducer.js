@@ -1,36 +1,53 @@
 import { combineReducers } from "redux";
-import {
-    GET_CHARACTERS_SUCCESS,
-    GET_CHARACTERS_ERROR,
-    SET_CURRENT_CHARACTER,
-    SEARCH_CHARACTER,
-    SEARCH_CHARACTER_SUCCESS,
-    SEARCH_CHARACTER_ERROR,
-    GET_PLANET_SUCCESS,
-    GET_PLANET_ERROR,
-    GET_SPECIE_SUCCESS,
-    GET_SPECIE_ERROR,
-    GET_STARSHIP_SUCCESS,
-    GET_STARSHIP_ERROR,
-    GET_STARSHIPS_SUCCESS,
-    GET_STARSHIPS_ERROR,
-} from "./actionsTypes";
+import * as actionTypes from "./actionsTypes";
 
 const INITIAL_STATE = {
     currentCharacter: {},
     characters: [],
     displayError: false,
-    // Need to figure out what goes in there son 
+    homeworld: {},
+    species: [],
+    starships: []
 };
 
 export const currentCharacter = (state = INITIAL_STATE.currentCharacter, action) => {
     switch (action.type) {
-        case SET_CURRENT_CHARACTER:
-        case SEARCH_CHARACTER_SUCCESS:
+        case actionTypes.SET_CURRENT_CHARACTER:
+        case actionTypes.SEARCH_CHARACTER_SUCCESS:
             return action.payload;
 
-        case SEARCH_CHARACTER_ERROR:
+        case actionTypes.SEARCH_CHARACTER_ERROR:
             return state;
+
+        default:
+            return state;
+    }
+}
+
+export const homeworld = (state = INITIAL_STATE.homeworld, action) => {
+    switch (action.type) {
+        case actionTypes.GET_ADDITIONNAL_INFOS_SUCCESS:
+            return action.payload.homeworld;
+
+        default:
+            return state;
+    }
+}
+
+export const species = (state = INITIAL_STATE.species, action) => {
+    switch (action.type) {
+        case actionTypes.GET_ADDITIONNAL_INFOS_SUCCESS:
+            return action.payload.species;
+
+        default:
+            return state;
+    }
+}
+
+export const starships = (state = INITIAL_STATE.starships, action) => {
+    switch (action.type) {
+        case actionTypes.GET_ADDITIONNAL_INFOS_SUCCESS:
+            return action.payload.starships;
 
         default:
             return state;
@@ -39,11 +56,10 @@ export const currentCharacter = (state = INITIAL_STATE.currentCharacter, action)
 
 export const characters = (state = INITIAL_STATE.characters, action) => {
     switch (action.type) {
-        case GET_CHARACTERS_SUCCESS: {
+        case actionTypes.GET_CHARACTERS_SUCCESS: {
             return action.payload;
         }
-
-        case GET_CHARACTERS_ERROR: {
+        case actionTypes.GET_CHARACTERS_ERROR: {
             return state
         }
 
@@ -52,14 +68,13 @@ export const characters = (state = INITIAL_STATE.characters, action) => {
     }
 }
 
-// puisque l'on affecte 2 variables comment fait-on pour les mettres dans notre initial state ? 
 export const displayError = (state = INITIAL_STATE.displayError, action) => {
     switch (action.type) {
-        case SEARCH_CHARACTER_SUCCESS: {
+        case actionTypes.SEARCH_CHARACTER_SUCCESS: {
             return false;
         }
 
-        case SEARCH_CHARACTER_ERROR: {
+        case actionTypes.SEARCH_CHARACTER_ERROR: {
             return true;
         }
 
@@ -68,49 +83,13 @@ export const displayError = (state = INITIAL_STATE.displayError, action) => {
     }
 }
 
-// export default function apiCalls(state = INITIAL_STATE, action) {
-//     switch (action.type) {
-//         case SET_CURRENT_CHARACTER: {
-//             console.log("In reducer", action);
-//             return ({
-//                 ...state,
-//                 currentCharacter: { ...action.payload }
-//             });
-//         }
-//         case GET_CHARACTERS_SUCCESS: {
-//             console.log("In reducer", action);
-//             return ({
-//                 ...state,
-//                 characters: action.payload
-//             });
-//         }
-//         case GET_CHARACTERS_ERROR: {
-//             return state
-//         }
-//         // case UPDATE_RESEARCH: {
-//         //     return;
-//         // }
-//         // case GET_PLANET: {
-//         //     return;
-//         // }
-//         // case GET_SPECIE: {
-//         //     return;
-//         // }
-//         // case GET_STARSHIP: {
-//         //     return;
-//         // }
-//         // case GET_STARSHIPS: {
-//         //     return;
-//         // }
-//         default:
-//             return state;
-//     }
-// }
-
 const apiReducer = combineReducers({
     currentCharacter,
     characters,
-    displayError
+    displayError,
+    homeworld,
+    species,
+    starships
 });
 
 export default apiReducer;

@@ -1,5 +1,5 @@
 import { fetchCharacters, searchCharacter } from '../../services/httpClient/people/characters'
-import { getPlanet } from '../../services/httpClient/planets/planet';
+import { fetchAPIData } from '../../services/httpClient/shared/shared';
 import {
     GET_CHARACTERS,
     GET_CHARACTERS_SUCCESS,
@@ -8,19 +8,12 @@ import {
     SEARCH_CHARACTER,
     SEARCH_CHARACTER_SUCCESS,
     SEARCH_CHARACTER_ERROR,
-    GET_PLANET,
-    GET_PLANET_SUCCESS,
-    GET_PLANET_ERROR,
-    GET_SPECIE,
-    GET_SPECIE_SUCCESS,
-    GET_SPECIE_ERROR,
-    GET_STARSHIP,
-    GET_STARSHIP_SUCCESS,
-    GET_STARSHIP_ERROR,
-    GET_STARSHIPS,
-    GET_STARSHIPS_SUCCESS,
-    GET_STARSHIPS_ERROR,
+    GET_ADDITIONNAL_INFOS,
+    GET_ADDITIONNAL_INFOS_SUCCESS,
+    GET_ADDITIONNAL_INFOS_ERROR,
 } from "./actionsTypes";
+
+
 
 export const getCharacters = (indexPage) => {
     return (dispatch, getState) => {
@@ -37,7 +30,6 @@ export const getCharacters = (indexPage) => {
 }
 
 export const setCurrentCharacter = currentCharacter => ({ type: SET_CURRENT_CHARACTER, payload: currentCharacter });
-
 
 export const searchCharacterByName = (searchText) => {
     return (dispatch) => {
@@ -57,24 +49,39 @@ export const searchCharacterByName = (searchText) => {
             })
     }
 }
+
 // dont erase this one son 👴
-export const getCharacterPlanet = (homeworld) => {
-    return (dispatch) => {
-        dispatch({ type: GET_PLANET })
-        return getPlanet(homeworld)
-            .then(response => { dispatch({ type: GET_PLANET_SUCCESS, payload: response }) })
-            .catch(error => { dispatch({ type: GET_PLANET_ERROR, payload: error }) })
+
+// export const getCharacterPlanet = (homeworld) => {
+//     return (dispatch) => {
+//         dispatch({ type: GET_PLANET })
+//         return getPlanet(homeworld)
+//             .then(response => { dispatch({ type: GET_PLANET_SUCCESS, payload: response }) })
+//             .catch(error => { dispatch({ type: GET_PLANET_ERROR, payload: error }) })
+//     }
+// }
+
+export const getInfos = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: GET_ADDITIONNAL_INFOS });
+        return fetchAPIData(getState().apiCalls.currentCharacter)
+            .then(response => {
+                console.log(response)
+                dispatch({ type: GET_ADDITIONNAL_INFOS_SUCCESS, payload: response });
+            })
+            .catch(error => { dispatch({ type: GET_ADDITIONNAL_INFOS_ERROR, payload: error }) })
     }
 }
 
 
+// const leStateCourantDeRedux = {
+//     user: {
 
+//     },
+//     drawerIsOpen: true,
+//     apiCalls: {
+//         currentCharacter: 5
+//     }
+// }
 
-
-
-
-// export const getSpecie = () => ({ type: GET_SPECIE });
-// export const getStarship = () => ({ type: GET_STARSHIP });
-// export const getStarships = () => ({ type: GET_STARSHIPS });
-
-
+// const getState = (a) => leStateCourantDeRedux.apiCalls.currentCharacter + a;

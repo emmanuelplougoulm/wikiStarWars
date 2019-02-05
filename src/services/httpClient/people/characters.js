@@ -11,5 +11,4 @@ export const searchCharacter = searchText => {
   return axios
     .get(`${BASE_URL}${CHARACTERS_ROUTE}?search=${searchText}`)
     .then(response => response.data)
-  // .catch(err => console.error(err));
 };

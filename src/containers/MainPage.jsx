@@ -5,7 +5,7 @@ import CharactersList from "./CharactersList";
 import CharacterDetail from "../components/CharacterDetail";
 import { connect } from 'react-redux';
 import { incrementPagination, decrementPagination } from '../store/pagination/actionsCreator';
-import { getCharacters, setCurrentCharacter, searchCharacterByName } from '../store/apiCalls/actionsCreator';
+import { getCharacters } from '../store/apiCalls/actionsCreator';
 
 class MainPage extends Component {
 
@@ -35,7 +35,6 @@ class MainPage extends Component {
         <CharacterDetail />
         <div className="section3">
           <CharactersList
-            onClickListItem={this.onClickListItem}
             next={this.props.next}
             previous={this.props.previous}
           />

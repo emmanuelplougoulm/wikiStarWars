@@ -2,13 +2,13 @@ import React from "react";
 import { charactersPictures } from "../data/images";
 
 const CharacterListItem = props => {
-  const { character, onClickListItem } = props;
+  const { character, onClick } = props;
   // {name} passé en argument équivaut à let name = props.name
   const BASE_IMG_SEARCH = "../assets/";
   const nameSearch = charactersPictures[character.name];
 
   return (
-    <li className="card" onClick={() => onClickListItem(character)}>
+    <li className="card" onClick={onClick}>
       <div className="">
         <img className="" src={`${BASE_IMG_SEARCH}${nameSearch}`} alt="" background="white" height="150" width="120" />
       </div>
