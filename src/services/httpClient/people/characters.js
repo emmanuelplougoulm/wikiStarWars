@@ -3,15 +3,12 @@ import { BASE_URL } from "../clientHttp";
 
 const CHARACTERS_ROUTE = "people/";
 
-export const getCharacters = indexPage =>
+export const fetchCharacters = indexPage =>
   axios
-    .get(`${BASE_URL}${CHARACTERS_ROUTE}?page=${indexPage}`)
-    .then(response => response.data)
-    .catch(err => console.error(err));
+    .get(`${BASE_URL}${CHARACTERS_ROUTE}?page=${indexPage ? indexPage : 1}`)
 
-export const updateResearch = searchText => {
+export const searchCharacter = searchText => {
   return axios
     .get(`${BASE_URL}${CHARACTERS_ROUTE}?search=${searchText}`)
     .then(response => response.data)
-    .catch(err => console.error(err));
 };

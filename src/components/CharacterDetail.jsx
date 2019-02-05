@@ -1,65 +1,28 @@
 import React, { PureComponent } from "react";
+import { connect } from 'react-redux';
 import { charactersPictures } from "../data/images";
-import { getPlanet } from "../services/httpClient/planets/planet";
-import { getSpecie } from "../services/httpClient/species/specie";
-import { getStarship } from "../services/httpClient/starships/starship";
+import { getInfos } from "../store/apiCalls/actionsCreator";
 
 const BASE_IMG_SEARCH = "../assets/";
 
 class CharacterDetail extends PureComponent {
-  state = {
-    homeworld: {},
-    species: [],
-    starships: []
-  }
-
-  componentDidMount() {
-    this.fetchAPIData();
-  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.currentCharacter.name !== this.props.currentCharacter.name) {
-      this.fetchAPIData();
+      this.props.loadCharacterInfos()
     }
   }
 
-  fetchAPIData = () => {
-    const {currentCharacter} = this.props;
-
-    if (!currentCharacter.name) {
-      return ;
-    }
-
-    return Promise.all([this.getHomeWorld(), this.getSpecies(), this.getStarships()])
-    .then(([homeworld, species, starships]) => this.setState({
-        homeworld, 
-        species: species.map(specie => `${specie.name} `), 
-        starships: starships.map(starship => `${starship.name} `)
-      })
-    )
-  }
-
-  getHomeWorld = () => getPlanet(this.props.currentCharacter.homeworld);
-
-  getSpecies = () => {
-    const {species} = this.props.currentCharacter;
-    const promises = species.map(specie => getSpecie(specie));
-    return Promise.all(promises);
-  };
-
-  getStarships = () => {
-    const {starships} = this.props.currentCharacter;
-    const promises = starships.map(starship => getStarship(starship));
-    return Promise.all(promises);
-  };
+  arrayToString = array => array.map(element => element.name).join(', ');
 
   render() {
-    console.log("renderCharacter detail");
-
-    const { currentCharacter } = this.props;
+    const { currentCharacter, homeworld, species, starships } = this.props;
+    console.log(starships)
     const { name, birth_year, eye_color, height, skin_color } = currentCharacter;
-    const { homeworld, species, starships } = this.state;
     const nameSearch = charactersPictures[name];
+
+    const speciesNames = this.arrayToString(species);
+    const starshipsNames = this.arrayToString(starships);
 
     return (
       <div className="character-detail">
@@ -73,12 +36,26 @@ class CharacterDetail extends PureComponent {
           <p>Height: {height}</p>
           <p>Homeworld: {homeworld ? homeworld.name : ''}</p>
           <p>Skin color: {skin_color}</p>
-          <p>Species: {species}</p>
-          <p>Starships: {starships}</p>
+          <p>Species: {speciesNames}</p>
+          <p>Starships: {starshipsNames}</p>
         </div>
       </div>
     );
   }
 }
 
-export default CharacterDetail;
+const mapStateToProps = state => ({
+  currentPage: state.pagination.currentPage,
+  characters: state.apiCalls.characters,
+  currentCharacter: state.apiCalls.currentCharacter,
+  homeworld: state.apiCalls.homeworld,
+  species: state.apiCalls.species,
+  starships: state.apiCalls.starships,
+});
+
+
+const mapDispatchToProps = dispatch => ({
+  loadCharacterInfos: () => dispatch(getInfos()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CharacterDetail);

@@ -1,5 +1,7 @@
 import React from "react";
+import { connect } from 'react-redux';
 import CharacterListItem from "../components/CharacterListItem";
+import { setCurrentCharacter } from "../store/apiCalls/actionsCreator";
 
 const CharactersList = props => {
   const { characters, onClickListItem, next, previous } = props;
@@ -8,7 +10,7 @@ const CharactersList = props => {
     <div>
       <ul className="charactersList">
         {characters.map(character => {
-          return <CharacterListItem key={character.name} character={character} onClickListItem={onClickListItem} />;
+          return <CharacterListItem key={character.name} character={character} onClick={() => onClickListItem(character)} />;
         })}
       </ul>
       <div className="btn-ctnr">
@@ -23,4 +25,13 @@ const CharactersList = props => {
   );
 };
 
-export default CharactersList;
+const mapStateToProps = state => ({
+  currentCharacter: state.apiCalls.currentCharacter,
+  characters: state.apiCalls.characters
+});
+
+const mapDispatchToProps = dispatch => ({
+  onClickListItem: currentCharacter => dispatch(setCurrentCharacter(currentCharacter)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CharactersList);
